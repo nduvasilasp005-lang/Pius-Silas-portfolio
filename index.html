@@ -316,6 +316,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 10px;
     }
 
     .property-price {
@@ -338,6 +339,26 @@
       font-weight: 600;
       color: #f59e0b;
     }
+
+    /* ── PAY BUTTON ON CARD ── */
+    .btn-pay-card {
+      width: 100%;
+      padding: 9px 0;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-pay-card:hover { background: #d4952e; transform: translateY(-1px); }
 
     /* ── NO RESULTS ── */
     #no-results {
@@ -636,7 +657,6 @@
       display: none;
     }
 
-    /* User avatar in header when logged in */
     .user-avatar {
       width: 36px;
       height: 36px;
@@ -653,9 +673,7 @@
       font-family: 'DM Sans', sans-serif;
     }
 
-    .user-menu {
-      position: relative;
-    }
+    .user-menu { position: relative; }
 
     .user-dropdown {
       display: none;
@@ -712,7 +730,253 @@
 
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── RESPONSIVE ── */
+    /* ════════════════════════════════════════════
+       M-PESA MODAL  — new styles added below
+       ════════════════════════════════════════════ */
+
+    /* Overlay — same pattern as auth-modal but higher z-index so it sits above everything */
+    #mpesa-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.60);
+      z-index: 600;           /* above auth modal (500) and chat (200) */
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      padding: 20px;
+    }
+    #mpesa-modal.open { display: flex; }
+
+    /* The white card */
+    .mpesa-card {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.30);
+      animation: slideUp 0.3s ease;  /* reuse existing keyframe */
+      position: relative;
+    }
+
+    /* Green header bar — M-Pesa brand colour */
+    .mpesa-card-header {
+      background: linear-gradient(135deg, #007a3d 0%, #00a651 100%);
+      padding: 22px 24px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* White circle with the M logo */
+    .mpesa-icon {
+      width: 46px; height: 46px;
+      background: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .mpesa-icon svg { width: 28px; height: 28px; }
+
+    .mpesa-card-header-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: white;
+      margin-bottom: 2px;
+    }
+    .mpesa-card-header-text p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+    }
+
+    /* Close button — top right corner */
+    .mpesa-close {
+      position: absolute;
+      top: 14px; right: 18px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+    .mpesa-close:hover { background: rgba(255,255,255,0.35); }
+
+    /* Property summary strip */
+    .mpesa-property-strip {
+      background: var(--light);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mpesa-property-strip .prop-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .mpesa-property-strip .prop-loc {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+    .mpesa-property-strip .prop-amount {
+      text-align: right;
+    }
+    .mpesa-property-strip .prop-amount strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .mpesa-property-strip .prop-amount span {
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    /* Form body */
+    .mpesa-body { padding: 20px 24px 24px; }
+
+    .mpesa-field { margin-bottom: 14px; }
+    .mpesa-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Phone input with flag prefix */
+    .mpesa-phone-wrap { position: relative; }
+    .mpesa-prefix {
+      position: absolute;
+      left: 13px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #444;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .mpesa-phone-wrap input { padding-left: 82px !important; }
+
+    .mpesa-field input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+      color: #222;
+      outline: none;
+      transition: border-color 0.18s;
+    }
+    .mpesa-field input:focus { border-color: #00a651; }
+    .mpesa-field input::placeholder { color: #bbb; }
+
+    /* Green pay button — matches the header */
+    .mpesa-pay-btn {
+      width: 100%;
+      padding: 13px;
+      background: #00a651;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.12s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 6px;
+    }
+    .mpesa-pay-btn:hover { background: #008f45; }
+    .mpesa-pay-btn:active { transform: scale(0.98); }
+    .mpesa-pay-btn:disabled { background: #8ecfab; cursor: not-allowed; transform: none; }
+
+    /* Spinner inside the button */
+    .mpesa-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: mpesaSpin 0.7s linear infinite;
+      display: none;
+      flex-shrink: 0;
+    }
+    @keyframes mpesaSpin { to { transform: rotate(360deg); } }
+
+    /* Status message box */
+    .mpesa-status {
+      border-radius: 9px;
+      padding: 11px 14px;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+      line-height: 1.5;
+    }
+    .mpesa-status.waiting { background: #fff8e1; color: #7a5800; border: 1px solid #ffe082; display: block; }
+    .mpesa-status.success { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; display: block; }
+    .mpesa-status.error   { background: #fce4ec; color: #880e4f; border: 1px solid #f48fb1; display: block; }
+
+    /* Paybill + account number info strip */
+    .mpesa-paybill-strip {
+      background: #f0fdf4;
+      border-bottom: 1px solid #d1fae5;
+      padding: 10px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .mpesa-paybill-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mpesa-pb-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #4b7a5e;
+    }
+    .mpesa-pb-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #166534;
+      letter-spacing: 0.04em;
+      font-family: monospace;
+    }
+    .mpesa-pb-value.accent {
+      color: #00a651;
+      font-size: 15px;
+    }
+
+    /* Payment link in user dropdown */
+    .user-dropdown a.pay-link {
+      color: #00a651;
+      font-weight: 600;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .user-dropdown a.pay-link:hover { background: #f0fdf4; }
+
+    /* Safaricom trust footer */
+    .mpesa-trust {
+      text-align: center;
+      font-size: 11px;
+      color: #bbb;
+      margin-top: 14px;
+    }
+    .mpesa-trust a { color: #00a651; text-decoration: none; }
+
     @media (max-width: 600px) {
       header { padding: 14px 20px; }
       .featured { padding: 16px 20px 40px; }
@@ -745,7 +1009,7 @@
         <label>Type</label>
         <select id="search-type">
           <option value="">All Types</option>
-          <option value="hostays">BnB</option>
+          <option value="hostays">Hostays</option>
           <option value="rent">For Rent</option>
           <option value="sale">For Sale</option>
         </select>
@@ -761,7 +1025,7 @@
   <!-- FILTER TABS -->
   <div class="filter-bar">
     <button class="filter-btn active" onclick="filterBy('all', this)">All</button>
-    <button class="filter-btn" onclick="filterBy('bnb', this)">BnB</button>
+    <button class="filter-btn" onclick="filterBy('bnb', this)">Hostays</button>
     <button class="filter-btn" onclick="filterBy('rent', this)">For Rent</button>
     <button class="filter-btn" onclick="filterBy('sale', this)">For Sale</button>
     <button class="filter-btn" onclick="filterBy('top', this)">⭐ Top Rated</button>
@@ -773,9 +1037,7 @@
       <h3>Featured Properties</h3>
       <span id="results-count"></span>
     </div>
-    <div class="properties" id="properties-grid">
-      <!-- Cards injected by JS -->
-    </div>
+    <div class="properties" id="properties-grid"></div>
     <div id="no-results">
       <div style="font-size:48px">🏠</div>
       <p>No properties found. Try adjusting your search.</p>
@@ -789,7 +1051,7 @@
       <div class="step">
         <div class="step-number">1</div>
         <h4>Search & Discover</h4>
-        <p>Browse hundreds of BnBs, rental homes, and properties for sale across Kenya.</p>
+        <p>Browse hundreds of Hostays, rental homes, and properties for sale across Kenya.</p>
       </div>
       <div class="step">
         <div class="step-number">2</div>
@@ -811,13 +1073,11 @@
       <h2>Welcome Back</h2>
       <p class="modal-sub">Sign in or create your Host Me Ke account</p>
 
-      <!-- Tabs -->
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchTab('login', this)">Log In</button>
         <button class="auth-tab" onclick="switchTab('signup', this)">Sign Up</button>
       </div>
 
-      <!-- Error / Success messages -->
       <div class="auth-error" id="auth-error"></div>
       <div class="auth-success" id="auth-success"></div>
 
@@ -863,6 +1123,79 @@
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════════════════════════
+       M-PESA PAYMENT MODAL
+       This sits hidden on the page. openMpesaModal() fills it
+       with the property details and then shows it.
+       ══════════════════════════════════════════════════════════ -->
+  <div id="mpesa-modal">
+    <div class="mpesa-card">
+
+      <!-- Close button -->
+      <button class="mpesa-close" onclick="closeMpesaModal()" title="Close">✕</button>
+
+      <!-- Green header -->
+      <div class="mpesa-card-header">
+        <div class="mpesa-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 23L9 8L14 18L19 8L25 23" stroke="#00a651" stroke-width="3"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="mpesa-card-header-text">
+          <h3>Pay with M-Pesa</h3>
+          <p>You'll receive a prompt on your phone</p>
+        </div>
+      </div>
+
+      <!-- Property summary -->
+      <div class="mpesa-property-strip">
+        <div>
+          <div class="prop-name" id="mp-prop-name">—</div>
+          <div class="prop-loc"  id="mp-prop-loc">—</div>
+        </div>
+        <div class="prop-amount">
+          <strong id="mp-prop-price">KES 0</strong>
+          <span   id="mp-prop-unit"></span>
+        </div>
+      </div>
+      <!-- Paybill + account number info strip -->
+      <div class="mpesa-paybill-strip">
+        <div class="mpesa-paybill-row">
+          <span class="mpesa-pb-label">Paybill Number</span>
+          <span class="mpesa-pb-value" id="mp-paybill">42628305</span>
+        </div>
+        <div class="mpesa-paybill-row">
+          <span class="mpesa-pb-label">Account Number</span>
+          <span class="mpesa-pb-value accent" id="mp-account">—</span>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="mpesa-body">
+        <div class="mpesa-field">
+          <label>M-Pesa Phone Number</label>
+          <div class="mpesa-phone-wrap">
+            <span class="mpesa-prefix">🇰🇪 +254</span>
+            <input type="tel" id="mp-phone" placeholder="7XX XXX XXX"
+                   maxlength="9" inputmode="numeric" />
+          </div>
+        </div>
+
+        <button class="mpesa-pay-btn" id="mp-pay-btn" onclick="mpesaPay()">
+          <span class="mpesa-spinner" id="mp-spinner"></span>
+          <span id="mp-btn-label">Send Payment Request</span>
+        </button>
+
+        <div class="mpesa-status" id="mp-status"></div>
+
+        <div class="mpesa-trust">
+          Secured by <a href="https://www.safaricom.co.ke/personal/m-pesa" target="_blank">Safaricom M-Pesa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <p>&copy; 2026 <span>Host Me Ke</span>. All rights reserved. | Proudly Kenyan 🇰🇪</p>
@@ -877,121 +1210,56 @@
   <!-- TOAST -->
   <div id="toast"></div>
 
-  <!-- ============================
-       JAVASCRIPT
-  ============================= -->
   <script>
 
-    // ── PROPERTY DATA ──────────────────────────────────────────────
+    // ── PROPERTY DATA ──
     const allProperties = [
-      {
-        id: 1, name: "Villa Sol y Luna",
-        location: "Diani Beach, Mombasa",
-        type: "bnb",
-        price: 9400, unit: "/night",
-        rating: 8.5,
-        img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&q=80",
-        beds: 3
-      },
-      {
-        id: 2, name: "Castaway Villa",
-        location: "Watamu, Kilifi",
-        type: "bnb",
-        price: 9548, unit: "/night",
-        rating: 8.9,
-        img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=400&q=80",
-        beds: 4
-      },
-      {
-        id: 3, name: "Falcon Nest",
-        location: "Karen, Nairobi",
-        type: "rent",
-        price: 8570, unit: "/month",
-        rating: 7.4,
-        img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80",
-        beds: 2
-      },
-      {
-        id: 4, name: "Orlando Resort",
-        location: "Kisumu, Nyanza",
-        type: "bnb",
-        price: 8700, unit: "/night",
-        rating: 7.9,
-        img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80",
-        beds: 5
-      },
-      {
-        id: 5, name: "Savanna Heights",
-        location: "Ngong Road, Nairobi",
-        type: "sale",
-        price: 12500000, unit: " KES",
-        rating: 9.1,
-        img: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&q=80",
-        beds: 4
-      },
-      {
-        id: 6, name: "Coral Bay Cottage",
-        location: "Malindi, Kilifi",
-        type: "rent",
-        price: 35000, unit: "/month",
-        rating: 8.2,
-        img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400&q=80",
-        beds: 2
-      },
-      {
-        id: 7, name: "Lakeside Manor",
-        location: "Naivasha, Rift Valley",
-        type: "sale",
-        price: 8900000, unit: " KES",
-        rating: 8.7,
-        img: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400&q=80",
-        beds: 5
-      },
-      {
-        id: 8, name: "Uhuru Apartments",
-        location: "Westlands, Nairobi",
-        type: "rent",
-        price: 55000, unit: "/month",
-        rating: 7.8,
-        img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80",
-        beds: 1
-      }
+      { id: 1, accountNumber: "HM0012026", name: "Villa Sol y Luna", location: "Diani Beach, Mombasa", type: "bnb", price: 9400, unit: "/night", rating: 8.5, img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&q=80", beds: 3 },
+      { id: 2, accountNumber: "HM0022026", name: "Castaway Villa", location: "Watamu, Kilifi", type: "bnb", price: 9548, unit: "/night", rating: 8.9, img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=400&q=80", beds: 4 },
+      { id: 3, accountNumber: "HM0032026", name: "Falcon Nest", location: "Karen, Nairobi", type: "rent", price: 8570, unit: "/month", rating: 7.4, img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80", beds: 2 },
+      { id: 4, accountNumber: "HM0042026", name: "Orlando Resort", location: "Kisumu, Nyanza", type: "bnb", price: 8700, unit: "/night", rating: 7.9, img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80", beds: 5 },
+      { id: 5, accountNumber: "HM0052026", name: "Savanna Heights", location: "Ngong Road, Nairobi", type: "sale", price: 12500000, unit: " KES", rating: 9.1, img: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&q=80", beds: 4 },
+      { id: 6, accountNumber: "HM0062026", name: "Coral Bay Cottage", location: "Malindi, Kilifi", type: "rent", price: 35000, unit: "/month", rating: 8.2, img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400&q=80", beds: 2 },
+      { id: 7, accountNumber: "HM0072026", name: "Lakeside Manor", location: "Naivasha, Rift Valley", type: "sale", price: 8900000, unit: " KES", rating: 8.7, img: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400&q=80", beds: 5 },
+      { id: 8, accountNumber: "HM0082026", name: "Uhuru Apartments", location: "Westlands, Nairobi", type: "rent", price: 55000, unit: "/month", rating: 7.8, img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80", beds: 1 }
     ];
 
     const liked = new Set();
 
+    // ── renderProperties — now includes a Pay button on each card ──
     function renderProperties(list) {
-      const grid = document.getElementById('properties-grid');
+      const grid      = document.getElementById('properties-grid');
       const noResults = document.getElementById('no-results');
-      const countEl  = document.getElementById('results-count');
-
-      grid.innerHTML = '';
+      const countEl   = document.getElementById('results-count');
+      grid.innerHTML  = '';
 
       if (list.length === 0) {
         noResults.style.display = 'block';
         countEl.textContent = '0 properties found';
         return;
       }
-
       noResults.style.display = 'none';
       countEl.textContent = list.length + ' propert' + (list.length === 1 ? 'y' : 'ies') + ' found';
 
       list.forEach(p => {
-        const badgeClass = p.type === 'sale' ? 'sale' : p.type === 'bnb' ? 'bnb' : '';
-        const badgeLabel = p.type === 'sale' ? 'For Sale' : p.type === 'bnb' ? 'BnB' : 'For Rent';
-        const isLiked = liked.has(p.id);
+        const badgeClass  = p.type === 'sale' ? 'sale' : p.type === 'bnb' ? 'bnb' : '';
+        const badgeLabel  = p.type === 'sale' ? 'For Sale' : p.type === 'bnb' ? 'Hostays' : 'For Rent';
+        const isLiked     = liked.has(p.id);
         const formattedPrice = p.price.toLocaleString('en-KE');
-        const stars = '★'.repeat(Math.round(p.rating / 2)) + '☆'.repeat(5 - Math.round(p.rating / 2));
+
+        // Button label changes based on property type
+        const payLabel = p.type === 'sale' ? '💳 Pay Deposit' : p.type === 'rent' ? '💳 Pay Deposit' : '💳 Book & Pay';
 
         const card = document.createElement('div');
-        card.className = 'property';
+        card.className  = 'property';
         card.dataset.id = p.id;
+
         card.innerHTML = `
           <div class="property-img-wrap">
             <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'"/>
             <span class="property-badge ${badgeClass}">${badgeLabel}</span>
             <button class="wishlist-btn ${isLiked ? 'liked' : ''}"
-              onclick="toggleLike(event, ${p.id})" title="Save to wishlist">
+                    onclick="toggleLike(event, ${p.id})" title="Save to wishlist">
               ${isLiked ? '❤️' : '🤍'}
             </button>
           </div>
@@ -1000,15 +1268,18 @@
             <div class="property-location">📍 ${p.location} · ${p.beds} bed${p.beds > 1 ? 's' : ''}</div>
             <div class="property-meta">
               <div class="property-price">KES ${formattedPrice}<span>${p.unit}</span></div>
-              <div class="property-rating" title="Rating ${p.rating}/10">
-                ⭐ ${p.rating}
-              </div>
+              <div class="property-rating">⭐ ${p.rating}</div>
             </div>
-          </div>
-        `;
+            <!-- PAY BUTTON: clicking it calls openMpesaModal with this property's data -->
+            <button class="btn-pay-card"
+                    onclick="openMpesaModal(event, ${p.id})">
+              ${payLabel}
+            </button>
+          </div>`;
 
+        // Clicking the card body (not the buttons) shows a toast
         card.addEventListener('click', (e) => {
-          if (e.target.closest('.wishlist-btn')) return;
+          if (e.target.closest('.wishlist-btn') || e.target.closest('.btn-pay-card')) return;
           showToast(`Viewing: ${p.name}`);
         });
 
@@ -1016,21 +1287,303 @@
       });
     }
 
+    // ══════════════════════════════════════════════════════════
+    // M-PESA MODAL LOGIC
+    // ══════════════════════════════════════════════════════════
+
+    // Change this to your Express server URL once deployed
+    const MPESA_API = 'http://localhost:3000';
+
+    // Holds the property currently being paid for
+    let mpesaProperty = null;
+
+    /**
+     * openMpesaModal(event, propertyId)
+     * Called when user clicks "Book & Pay" on a card.
+     * Finds the property, populates the modal, then shows it.
+     */
+    function openMpesaModal(event, propertyId) {
+      event.stopPropagation(); // prevent card click handler firing
+      populateMpesaModal(propertyId);
+    }
+
+    /**
+     * populateMpesaModal(propertyId)
+     * Fills the modal with property details including the unique
+     * account number, then shows it. Called from both the card
+     * pay button and the dropdown "Make Payment" menu item.
+     */
+    function populateMpesaModal(propertyId) {
+      mpesaProperty = allProperties.find(p => p.id === propertyId);
+      if (!mpesaProperty) return;
+
+      // Property summary strip
+      document.getElementById('mp-prop-name').textContent  = mpesaProperty.name;
+      document.getElementById('mp-prop-loc').textContent   = '📍 ' + mpesaProperty.location;
+      document.getElementById('mp-prop-price').textContent = 'KES ' + mpesaProperty.price.toLocaleString('en-KE');
+      document.getElementById('mp-prop-unit').textContent  = mpesaProperty.unit;
+
+      // Paybill is fixed; account number is unique per property
+      document.getElementById('mp-paybill').textContent = '42628305';
+      document.getElementById('mp-account').textContent = mpesaProperty.accountNumber;
+
+      // Clean form
+      document.getElementById('mp-phone').value = '';
+      resetMpesaUI();
+
+      // Show
+      document.getElementById('mpesa-modal').classList.add('open');
+    }
+
+    /**
+     * openMpesaFromMenu()
+     * Called from the user dropdown "Make Payment" link.
+     * Opens a property picker so the user can choose which
+     * property they are paying for.
+     */
+    function openMpesaFromMenu() {
+      closeUserDropdown();
+
+      // Build a simple property list modal
+      const overlay = document.createElement('div');
+      overlay.id = 'prop-picker-overlay';
+      overlay.style.cssText = `
+        position:fixed;inset:0;background:rgba(0,0,0,0.55);
+        z-index:650;display:flex;align-items:center;justify-content:center;
+        backdrop-filter:blur(4px);padding:20px;
+      `;
+
+      const box = document.createElement('div');
+      box.style.cssText = `
+        background:#fff;border-radius:20px;width:100%;max-width:420px;
+        max-height:80vh;overflow:hidden;display:flex;flex-direction:column;
+        box-shadow:0 24px 60px rgba(0,0,0,0.3);animation:slideUp 0.3s ease;
+      `;
+
+      // Header
+      const hdr = document.createElement('div');
+      hdr.style.cssText = `
+        background:linear-gradient(135deg,#1a3c5e,#2d6a9f);
+        padding:20px 24px;display:flex;justify-content:space-between;align-items:center;
+      `;
+      hdr.innerHTML = `
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;color:#fff;font-weight:700;">Select Property to Pay</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:3px;">Choose the property you are paying for</div>
+        </div>
+        <button onclick="document.getElementById('prop-picker-overlay').remove()"
+          style="background:rgba(255,255,255,0.2);border:none;border-radius:50%;
+                 width:30px;height:30px;color:#fff;font-size:16px;cursor:pointer;
+                 display:flex;align-items:center;justify-content:center;">✕</button>
+      `;
+
+      // List
+      const list = document.createElement('div');
+      list.style.cssText = 'overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px;';
+
+      allProperties.forEach(p => {
+        const row = document.createElement('button');
+        row.style.cssText = `
+          display:flex;justify-content:space-between;align-items:center;
+          padding:12px 14px;background:#f7f4ef;border:1.5px solid #e2ddd6;
+          border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;
+          transition:all 0.15s;text-align:left;width:100%;
+        `;
+        row.onmouseenter = () => { row.style.background='#e8f5e9'; row.style.borderColor='#00a651'; };
+        row.onmouseleave = () => { row.style.background='#f7f4ef'; row.style.borderColor='#e2ddd6'; };
+
+        const typeLabel = p.type === 'bnb' ? 'Hostay' : p.type === 'rent' ? 'Rental' : 'For Sale';
+        const typeBg    = p.type === 'bnb' ? '#38a838' : p.type === 'rent' ? '#1a3c5e' : '#e85a38';
+
+        row.innerHTML = `
+          <div>
+            <div style="font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:3px;">${p.name}</div>
+            <div style="font-size:12px;color:#6b7280;">📍 ${p.location}</div>
+            <div style="font-size:11px;color:#00a651;font-weight:600;margin-top:3px;font-family:monospace;">Acc: ${p.accountNumber}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:12px;">
+            <div style="font-size:13px;font-weight:700;color:#1a3c5e;">KES ${p.price.toLocaleString('en-KE')}</div>
+            <div style="font-size:10px;color:#6b7280;">${p.unit}</div>
+            <div style="margin-top:4px;display:inline-block;background:${typeBg};color:#fff;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;">${typeLabel}</div>
+          </div>
+        `;
+
+        row.addEventListener('click', () => {
+          document.getElementById('prop-picker-overlay').remove();
+          populateMpesaModal(p.id);
+        });
+
+        list.appendChild(row);
+      });
+
+      box.appendChild(hdr);
+      box.appendChild(list);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      // Close on outside click
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.remove();
+      });
+    }
+
+    /** Close the modal and reset everything */
+    function closeMpesaModal() {
+      document.getElementById('mpesa-modal').classList.remove('open');
+      mpesaProperty = null;
+      resetMpesaUI();
+    }
+
+    // Clicking the dark overlay (outside the card) also closes it
+    document.getElementById('mpesa-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeMpesaModal();
+    });
+
+    /** Reset button, spinner, and status back to default */
+    function resetMpesaUI() {
+      const btn    = document.getElementById('mp-pay-btn');
+      const spinner= document.getElementById('mp-spinner');
+      const label  = document.getElementById('mp-btn-label');
+      const status = document.getElementById('mp-status');
+      btn.disabled          = false;
+      spinner.style.display = 'none';
+      label.textContent     = 'Send Payment Request';
+      status.className      = 'mpesa-status';
+      status.textContent    = '';
+    }
+
+    function setMpesaLoading(loading) {
+      const btn    = document.getElementById('mp-pay-btn');
+      const spinner= document.getElementById('mp-spinner');
+      const label  = document.getElementById('mp-btn-label');
+      btn.disabled          = loading;
+      spinner.style.display = loading ? 'block' : 'none';
+      label.textContent     = loading ? 'Waiting for payment…' : 'Send Payment Request';
+    }
+
+    function setMpesaStatus(type, msg) {
+      const el  = document.getElementById('mp-status');
+      el.className   = 'mpesa-status ' + type;
+      el.textContent = msg;
+    }
+
+    /**
+     * mpesaPay()
+     * Validates the phone number, calls the Express STK-push endpoint,
+     * then polls for confirmation.
+     */
+    async function mpesaPay() {
+      if (!mpesaProperty) return;
+
+      // Validate phone
+      const rawPhone = document.getElementById('mp-phone').value.trim().replace(/\s/g, '');
+      if (!rawPhone || rawPhone.length < 9) {
+        setMpesaStatus('error', 'Please enter a valid 9-digit M-Pesa number (e.g. 712345678).');
+        return;
+      }
+
+      // Normalise to 254XXXXXXXXX
+      const phone = '254' + rawPhone.replace(/^0/, '');
+      // Use the property's unique account number as the M-Pesa reference
+      const ref = mpesaProperty.accountNumber;
+
+      setMpesaLoading(true);
+      setMpesaStatus('waiting', '⏳ Sending payment request to your phone…');
+
+      try {
+        // 1. Trigger the STK Push on your Express server
+        const res  = await fetch(`${MPESA_API}/api/mpesa/stk-push`, {
+          method : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body   : JSON.stringify({
+            phone,
+            amount           : mpesaProperty.price,
+            accountReference : ref,          // e.g. HM0012026
+            description      : mpesaProperty.name,
+          }),
+        });
+
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error?.errorMessage || 'Failed to send request.');
+
+        const checkoutRequestID = data.data.CheckoutRequestID;
+        setMpesaStatus('waiting', '📱 Check your phone and enter your M-Pesa PIN to complete payment.');
+
+        // 2. Poll for confirmation (up to 60 seconds)
+        await pollMpesaStatus(checkoutRequestID);
+
+      } catch (err) {
+        setMpesaStatus('error', '❌ ' + err.message);
+        setMpesaLoading(false);
+      }
+    }
+
+    /**
+     * pollMpesaStatus(checkoutRequestID)
+     * Every 5 seconds, asks the Express server whether the payment went through.
+     * Stops after 60 seconds (timeout).
+     */
+    async function pollMpesaStatus(checkoutRequestID) {
+      const TIMEOUT  = 60_000;
+      const INTERVAL = 5_000;
+      const start    = Date.now();
+
+      return new Promise((resolve) => {
+        const timer = setInterval(async () => {
+          try {
+            const res  = await fetch(`${MPESA_API}/api/mpesa/stk-query`, {
+              method : 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body   : JSON.stringify({ checkoutRequestID }),
+            });
+            const data = await res.json();
+            const code = data.data?.ResultCode;
+
+            if (code === '0' || code === 0) {
+              // ✅ Payment confirmed
+              clearInterval(timer);
+              setMpesaLoading(false);
+              setMpesaStatus('success', '✅ Payment received! Your booking is confirmed.');
+              showToast('Payment successful! 🎉');
+              // Optional: close modal after a short delay
+              setTimeout(closeMpesaModal, 3500);
+              resolve();
+
+            } else if (code !== undefined && code !== '1032') {
+              // ❌ Failed (1032 = cancelled by user, keep waiting for that)
+              clearInterval(timer);
+              setMpesaLoading(false);
+              setMpesaStatus('error', '❌ Payment not completed. Please try again.');
+              resolve();
+            }
+
+            if (Date.now() - start > TIMEOUT) {
+              clearInterval(timer);
+              setMpesaLoading(false);
+              setMpesaStatus('error', '⏰ Request timed out. If you paid, please contact support.');
+              resolve();
+            }
+          } catch (_) { /* network blip — keep polling */ }
+        }, INTERVAL);
+      });
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // EXISTING SITE FUNCTIONS (unchanged)
+    // ══════════════════════════════════════════════════════════
+
     function runSearch() {
       const loc   = document.getElementById('search-location').value.trim().toLowerCase();
       const type  = document.getElementById('search-type').value;
       const price = parseFloat(document.getElementById('search-price').value) || Infinity;
-
       const results = allProperties.filter(p => {
         const matchLoc   = !loc  || p.location.toLowerCase().includes(loc) || p.name.toLowerCase().includes(loc);
         const matchType  = !type || p.type === type;
         const matchPrice = p.price <= price;
         return matchLoc && matchType && matchPrice;
       });
-
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       document.querySelector('.filter-btn').classList.add('active');
-
       renderProperties(results);
       showToast(results.length + ' result' + (results.length !== 1 ? 's' : '') + ' found');
     }
@@ -1038,27 +1591,19 @@
     function filterBy(type, btn) {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
       document.getElementById('search-location').value = '';
       document.getElementById('search-type').value = '';
       document.getElementById('search-price').value = '';
-
       let results;
-      if (type === 'all') {
-        results = allProperties;
-      } else if (type === 'top') {
-        results = [...allProperties].filter(p => p.rating >= 8.5).sort((a, b) => b.rating - a.rating);
-      } else {
-        results = allProperties.filter(p => p.type === type);
-      }
-
+      if (type === 'all') results = allProperties;
+      else if (type === 'top') results = [...allProperties].filter(p => p.rating >= 8.5).sort((a, b) => b.rating - a.rating);
+      else results = allProperties.filter(p => p.type === type);
       renderProperties(results);
     }
 
     function toggleLike(event, id) {
       event.stopPropagation();
       const btn = event.currentTarget;
-
       if (liked.has(id)) {
         liked.delete(id);
         btn.textContent = '🤍';
@@ -1082,16 +1627,15 @@
 
     const chatToggle = document.getElementById('chat-toggle');
     const chatWindow = document.getElementById('chat-window');
-
     chatToggle.addEventListener('click', () => {
       const isOpen = chatWindow.style.display === 'block';
       chatWindow.style.display = isOpen ? 'none' : 'block';
       chatToggle.textContent = isOpen ? '💬' : '✕';
     });
 
-    // ── SUPABASE SETUP 
+    // ── SUPABASE SETUP ──
     const SUPABASE_URL = 'https://vbcihvuckuzxfyaswphr.supabase.co';
-    const SUPABASE_KEY = 'YOUR_PUBLISHABLE_KEY_HERE';
+    const SUPABASE_KEY = 'sb_publishable_DnnpoQIOZTt_Z65h8pnM2Q_pQxqqAR4';
     const { createClient } = supabase;
     const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -1154,16 +1698,11 @@
     async function handleLogin() {
       const email    = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
-
       if (!email || !password) return showAuthError('Please fill in all fields.');
-
       setLoading('btn-login', true);
       clearAuthMessages();
-
       const { error } = await db.auth.signInWithPassword({ email, password });
-
       setLoading('btn-login', false);
-
       if (error) {
         showAuthError(error.message);
       } else {
@@ -1171,24 +1710,20 @@
         showToast('Welcome back! 👋');
       }
     }
+
     async function handleSignup() {
       const name     = document.getElementById('signup-name').value.trim();
       const email    = document.getElementById('signup-email').value.trim();
       const password = document.getElementById('signup-password').value;
-
       if (!name || !email || !password) return showAuthError('Please fill in all fields.');
       if (password.length < 6) return showAuthError('Password must be at least 6 characters.');
-
       setLoading('btn-signup', true);
       clearAuthMessages();
-
       const { error } = await db.auth.signUp({
         email, password,
         options: { data: { full_name: name } }
       });
-
       setLoading('btn-signup', false);
-
       if (error) {
         showAuthError(error.message);
       } else {
@@ -1214,7 +1749,6 @@
 
     function updateHeaderUI() {
       const headerLinks = document.getElementById('header-links');
-
       if (currentUser) {
         const name    = currentUser.user_metadata?.full_name || currentUser.email;
         const initial = name.charAt(0).toUpperCase();
@@ -1226,16 +1760,15 @@
               <p>Signed in as<br><strong>${currentUser.email}</strong></p>
               <a href="#">My Bookings</a>
               <a href="#">Wishlist ❤️</a>
+              <a href="#" class="pay-link" onclick="openMpesaFromMenu(); return false;">💳 Make Payment</a>
               <a href="#">Settings</a>
               <a href="#" class="logout" onclick="handleLogout()">Log Out</a>
             </div>
-          </div>
-        `;
+          </div>`;
       } else {
         headerLinks.innerHTML = `
           <a href="#" class="btn-host">Become a Host</a>
-          <a href="#" id="login-link" onclick="openModal('login'); return false;">Log in</a>
-        `;
+          <a href="#" id="login-link" onclick="openModal('login'); return false;">Log in</a>`;
       }
     }
 
@@ -1265,6 +1798,5 @@
     renderProperties(allProperties);
 
   </script>
-
 </body>
 </html>
